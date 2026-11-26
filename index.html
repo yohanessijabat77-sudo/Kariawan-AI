@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IG Reels AI Studio - 5 Karyawan Pintar</title>
+    <script src="https://tailwindcss.com"></script>
+    <link href="https://cloudflare.com" rel="stylesheet">
+    <style>
+        @import url('https://googleapis.com');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #09090b;
+            color: #fafafa;
+        }
+        .ig-gradient {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+        .glass-card {
+            background: rgba(24, 24, 27, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .agent-active {
+            border-color: #e1306c;
+            box-shadow: 0 0 25px rgba(225, 48, 108, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="border-b border-zinc-800 bg-zinc-950/90 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="ig-gradient p-2.5 rounded-xl shadow-lg">
+                    <i class="fab fa-instagram text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white">IG Reels AI Studio</h1>
+                    <p class="text-xs text-zinc-400">Tim 5 Karyawan Spesialis Video Instagram (9:16)</p>
+                </div>
+            </div>
+            <button onclick="openModal()" class="text-xs sm:text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 px-3.5 py-2 rounded-xl border border-zinc-700 transition flex items-center gap-2">
+                <i class="fas fa-key text-amber-400"></i> <span>Set API Key</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        
+        <!-- Input Topik & Gaya Reels -->
+        <section class="glass-card rounded-2xl p-6 mb-8">
+            <label for="topicInput" class="block text-sm font-semibold text-zinc-200 mb-2">
+                Mau Bikin Video Instagram Reels Tentang Apa Hari Ini?
+            </label>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="topicInput" 
+                    placeholder="Contoh: 3 Kebiasaan Pagi yang Bikin Produktif Tanpa Ngopi..." 
+                    class="flex-grow bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500 transition">
+                <button onclick="generateAll()" id="generateBtn"
+                    class="ig-gradient hover:opacity-90 text-white font-semibold px-6 py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-pink-600/20">
+                    <i class="fas fa-clapperboard"></i> Produksi 1 Video
+                </button>
+            </div>
+
+            <!-- Pilihan Gaya Konten IG -->
+            <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-zinc-400">
+                <span class="font-medium text-zinc-300">Gaya Reels:</span>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800">
+                    <input type="radio" name="style" value="edukasi" checked class="accent-pink-500"> Edukasi & Tips Cepat (30-45 dtk)
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800">
+                    <input type="radio" name="style" value="aesthetic" class="accent-pink-500"> Aesthetic / Sinematik (15-30 dtk)
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800">
+                    <input type="radio" name="style" value="storytelling" class="accent-pink-500"> Storytelling / Fakta Unik (60 dtk)
+                </label>
+            </div>
+        </section>
+
+        <!-- Grid 5 Karyawan AI -->
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-base sm:text-lg font-bold text-zinc-100 flex items-center gap-2">
+                <i class="fas fa-users-gear text-pink-500"></i> 5 Karyawan AI Kamu (Klik untuk Cek Tugas)
+            </h2>
+            <span class="text-xs text-zinc-400 hidden sm:inline">Output dirancang 100% untuk rasio 9:16</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8" id="agentsGrid">
+            <!-- Karyawan 1 -->
+            <div onclick="selectAgent(0)" id="card-0" class="agent-card glass-card rounded-2xl p-4 cursor-pointer transition hover:border-pink-500/50 agent-active">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="bg-pink-500/20 text-pink-300 text-xs font-semibold px-2.5 py-1 rounded-full">01. Hook & Tren</span>
+                    <i class="fas fa-fire text-pink-400 text-lg"></i>
+                </div>
+                <h3 class="font-bold text-white text-base">Raka</h3>
+                <p class="text-xs text-zinc-400 mb-2">IG Trend & Hook Specialist</p>
+                <p class="text-xs text-zinc-300 line-clamp-2">Merancang kalimat & visual 3 detik pertama agar penonton berhenti scroll.</p>
+                <div class="mt-3 text-xs font-medium text-emerald-400 flex items-center gap-1.5" id="status-0">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Siap Bertugas
+                </div>
+            </div>
+
+            <!-- Karyawan 2 -->
+            <div onclick="selectAgent(1)" id="card-1" class="agent-card glass-card rounded-2xl p-4 cursor-pointer transition hover:border-pink-500/50">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="bg-purple-500/20 text-purple-300 text-xs font-semibold px-2.5 py-1 rounded-full">02. Naskah</span>
+                    <i class="fas fa-align-left text-purple-400 text-lg"></i>
+                </div>
+                <h3 class="font-bold text-white text-base">Nadia</h3>
+                <p class="text-xs text-zinc-400 mb-2">Reels Scriptwriter</p>
+                <p class="text-xs text-zinc-300 line-clamp-2">Menulis naskah padat, natural, dan teks layar (on-screen text) per detik.</p>
+                <div class="mt-3 text-xs font-medium text-emerald-400 flex items-center gap-1.5" id="status-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Siap Bertugas
+                </div>
+            </div>
+
+            <!-- Karyawan 3 -->
+            <div onclick="selectAgent(2)" id="card-2" class="agent-card glass-card rounded-2xl p-4 cursor-pointer transition hover:border-pink-500/50">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="bg-amber-500/20 text-amber-300 text-xs font-semibold px-2.5 py-1 rounded-full">03. Visual 9:16</span>
+                    <i class="fas fa-wand-magic-sparkles text-amber-400 text-lg"></i>
+                </div>
+                <h3 class="font-bold text-white text-base">Bima</h3>
+                <p class="text-xs text-zinc-400 mb-2">AI Visual & B-Roll Director</p>
+                <p class="text-xs text-zinc-300 line-clamp-2">Membuat prompt visual vertikal (9:16) aesthetic untuk tiap adegan video.</p>
+                <div class="mt-3 text-xs font-medium text-emerald-400 flex items-center gap-1.5" id="status-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Siap Bertugas
+                </div>
+            </div>
+
+            <!-- Karyawan 4 -->
+            <div onclick="selectAgent(3)" id="card-3" class="agent-card glass-card rounded-2xl p-4 cursor-pointer transition hover:border-pink-500/50">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="bg-cyan-500/20 text-cyan-300 text-xs font-semibold px-2.5 py-1 rounded-full">04. Audio & Beat</span>
+                    <i class="fas fa-headphones text-cyan-400 text-lg"></i>
+                </div>
+                <h3 class="font-bold text-white text-base">Sari</h3>
+                <p class="text-xs text-zinc-400 mb-2">Voiceover & IG Audio</p>
+                <p class="text-xs text-zinc-300 line-clamp-2">Mengatur gaya bicara voiceover dan jenis musik trending Instagram.</p>
+                <div class="mt-3 text-xs font-medium text-emerald-400 flex items-center gap-1.5" id="status-3">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Siap Bertugas
+                </div>
+            </div>
+
+            <!-- Karyawan 5 -->
+            <div onclick="selectAgent(4)" id="card-4" class="agent-card glass-card rounded-2xl p-4 cursor-pointer transition hover:border-pink-500/50">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-2.5 py-1 rounded-full">05. Caption & Cover</span>
+                    <i class="fas fa-hashtag text-emerald-400 text-lg"></i>
+                </div>
+                <h3 class="font-bold text-white text-base">Dito</h3>
+                <p class="text-xs text-zinc-400 mb-2">IG Growth & Caption</p>
+                <p class="text-xs text-zinc-300 line-clamp-2">Menulis caption pancingan komentar, teks sampul (Cover), dan hashtag.</p>
