@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IG Reels AI Studio</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: #09090b; color: #fafafa; margin: 0; padding: 16px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid #27272a; margin-bottom: 20px; }
+        .header h1 { font-size: 20px; margin: 0; background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card { background: #18181b; border: 1px solid #27272a; border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+        input[type="text"] { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #3f3f46; background: #09090b; color: #fff; font-size: 14px; margin-bottom: 12px; }
+        .btn-main { width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; font-weight: bold; font-size: 15px; cursor: pointer; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px; }
+        .agent { background: #18181b; border: 2px solid #27272a; border-radius: 12px; padding: 12px; cursor: pointer; transition: 0.2s; }
+        .agent.active { border-color: #e1306c; background: #27151f; }
+        .badge { font-size: 11px; color: #f472b6; font-weight: bold; }
+        .agent h3 { margin: 4px 0; font-size: 16px; }
+        .agent p { margin: 0; font-size: 12px; color: #a1a1aa; }
+        .status { font-size: 11px; color: #34d399; margin-top: 8px; font-weight: bold; }
+        .output-box { background: #000; border: 1px solid #27272a; border-radius: 12px; padding: 16px; white-space: pre-wrap; font-family: monospace; font-size: 13px; line-height: 1.5; color: #e4e4e7; min-height: 220px; }
+        .btn-copy { background: #27272a; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>IG Reels AI Studio</h1>
+                <small style="color:#a1a1aa">5 Karyawan AI Spesialis Video Instagram</small>
+            </div>
+        </div>
+
+        <div class="card">
+            <label style="display:block; font-size:13px; margin-bottom:8px; font-weight:600;">Topik Video Instagram Reels:</label>
+            <input type="text" id="topicInput" placeholder="Contoh: Video edukasi menambah stamina tubuh...">
+            <button class="btn-main" id="btnRun" onclick="mulaiProduksi()">Produksi 1 Video Sekarang</button>
+        </div>
+
+        <div class="grid">
+            <div class="agent active" id="card0" onclick="pilihKaryawan(0)">
+                <div class="badge">01. HOOK & TREN</div>
+                <h3>Raka</h3>
+                <p>Strategi 3 detik pertama</p>
+                <div class="status" id="st0">Siap Bertugas</div>
+            </div>
+            <div class="agent" id="card1" onclick="pilihKaryawan(1)">
+                <div class="badge">02. NASKAH</div>
+                <h3>Nadia</h3>
+                <p>Script & Teks Layar</p>
+                <div class="status" id="st1">Siap Bertugas</div>
+            </div>
+            <div class="agent" id="card2" onclick="pilihKaryawan(2)">
+                <div class="badge">03. VISUAL 9:16</div>
+                <h3>Bima</h3>
+                <p>Prompt Gambar/Video AI</p>
+                <div class="status" id="st2">Siap Bertugas</div>
+            </div>
+            <div class="agent" id="card3" onclick="pilihKaryawan(3)">
+                <div class="badge">04. AUDIO</div>
+                <h3>Sari</h3>
+                <p>Voiceover & Musik IG</p>
+                <div class="status" id="st3">Siap Bertugas</div>
+            </div>
+            <div class="agent" id="card4" onclick="pilihKaryawan(4)">
+                <div class="badge">05. PUBLIKASI</div>
+                <h3>Dito</h3>
+                <p>Cover, Caption & Hashtag</p>
+                <div class="status" id="st4">Siap Bertugas</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong id="judulHasil" style="color:#f472b6;">Hasil Kerja: Raka</strong>
+                <button class="btn-copy" onclick="salinTeks()">Salin Hasil Ini</button>
+            </div>
+            <div class="output-box" id="layarHasil">Masukkan topik video di atas, lalu tekan tombol "Produksi 1 Video Sekarang". Hasil kerja ke-5 karyawan akan langsung muncul di sini!</div>
+        </div>
+    </div>
+
+    <script>
+        var aktif = 0;
+        var hasil0 = "Belum ada tugas. Ketik topik di atas lalu tekan tombol Produksi.";
+        var hasil1 = "Menunggu topik untuk menulis naskah video...";
+        var hasil2 = "Menunggu topik untuk membuat prompt visual 9:16...";
+        var hasil3 = "Menunggu topik untuk arahan suara & musik...";
+        var hasil4 = "Menunggu topik untuk membuat caption & hashtag...";
+
+        function ambilHasil(nomor) {
+            if (nomor === 0) return hasil0;
+            if (nomor === 1) return hasil1;
+            if (nomor === 2) return hasil2;
+            if (nomor === 3) return hasil3;
+            return hasil4;
+        }
+
+        function pilihKaryawan(nomor) {
+            aktif = nomor;
+            var nama = ["Raka (Hook & Strategi)", "Nadia (Naskah Video)", "Bima (Prompt Visual AI)", "Sari (Audio & Suara)", "Dito (Caption & Hashtag)"];
+            document.getElementById("judulHasil").innerText = "Hasil Kerja: " + nama.at(nomor);
+            document.getElementById("layarHasil").innerText = ambilHasil(nomor);
+
+            for (var i = 0; i < 5; i++) {
+                var el = document.getElementById("card" + i);
+                if (i === nomor) el.classList.add("active");
+                else el.classList.remove("active");
+            }
+        }
+
+        function mulaiProduksi() {
+            var topik = document.getElementById("topicInput").value.trim();
+            if (!topik) {
+                alert("Ketik topik videonya dulu ya!");
+                return;
+            }
+
+            hasil0 = "=== TUGAS RAKA: STRATEGI & HOOK IG REELS ===\nTopik: " + topik + "\n\n1. HOOK 3 DETIK PERTAMA (Teks Besar di Layar):\n\"JANGAN LEWATKAN INI KALAU KAMU MAU TAU SOAL " + topik.toUpperCase() + "!\"\n\n2. HOOK SUARA PEMBUKA:\n\"Kebanyakan orang masih salah cara soal " + topik + ", padahal rahasianya cuma di 3 langkah ini...\"\n\n3. ATURAN RETENSI:\nGanti klip visual setiap 2.5 - 3 detik agar penonton tidak bosan dan menonton sampai habis.";
+
+            hasil1 = "=== TUGAS NADIA: NASKAH LENGKAP (35 DETIK) ===\n\n[00:00 - 00:04] HOOK:\nSuara: \"Sering ngerasa susah soal " + topik + "? Coba dengarkan ini sampai habis.\"\nTeks Layar: \"RAHASIA " + topik.toUpperCase() + " 🔥\"\n\n[00:05 - 00:18] POIN INTI:\nSuara: \"Pertama, berhenti melakukan cara lama yang bikin kamu cepat capek. Fokuslah pada kebiasaan kecil yang konsisten setiap hari terkait " + topik + ".\"\nTeks Layar: \"1. Fokus Kebiasaan Kecil\"\n\n[00:19 - 00:28] SOLUSI:\nSuara: \"Kedua, terapkan pola ini secara rutin selama 7 hari dan rasakan langsung perubahannya.\"\nTeks Layar: \"2. Konsisten 7 Hari\"\n\n[00:29 - 00:35] PENUTUP (CTA):\nSuara: \"Simpan video ini biar gak lupa, dan bagikan ke temanmu yang butuh info ini!\"\nTeks Layar: \"SAVE & SHARE SEKARANG 🔖\"";
+
+            hasil2 = "=== TUGAS BIMA: PROMPT VISUAL AI (RASIO 9:16) ===\nSalin & tempel prompt ini ke Bing Image Creator / Meta AI / Leonardo AI:\n\n- ADEGAN 1 (00:00 - 00:05):\n\"Cinematic vertical shot illustrating " + topik + ", dramatic morning sunlight, high contrast, crisp focus, aesthetic Instagram Reels style, 8k resolution --ar 9:16\"\n\n- ADEGAN 2 (00:06 - 00:20):\n\"Clean minimalist lifestyle photography representing " + topik + ", warm natural tones, shallow depth of field, shot on 35mm lens, ultra realistic --ar 9:16\"\n\n- ADEGAN 3 (00:21 - 00:35):\n\"Dynamic energetic close-up scene about " + topik + ", vibrant natural colors, smooth motion aesthetic, high quality photography --ar 9:16\"";
+
+            hasil3 = "=== TUGAS SARI: ARAHAN VOICEOVER & MUSIK ===\n\n1. GAYA SUARA (CapCut Text-to-Speech / Rekam Sendiri):\n- Gunakan nada bicara yang santai, antusias, dan jelas (seperti sedang bercerita ke teman dekat).\n- Atur kecepatan suara di 1.05x agar ritmenya pas untuk Instagram Reels.\n\n2. MUSIK LATAR (BGM):\n- Pilih musik instrumental Lo-Fi / Upbeat Ambient di Instagram Reels.\n- Kecilkan volume musik latar hingga 12% - 15% agar suara narator tetap terdengar sangat jelas.";
+
+            hasil4 = "=== TUGAS DITO: COVER, CAPTION & HASHTAG IG ===\n\n1. JUDUL SAMPUL (COVER REELS):\n\"CARA MUDAH " + topik.toUpperCase() + "\"\n\n2. CAPTION INSTAGRAM:\nMasih bingung mulai dari mana soal " + topik + "? Ternyata kuncinya sesimpel ini 👇\n\nCoba praktikkan langkah di video ini mulai hari ini dan rasakan bedanya!\n\nMenurut kamu, tips mana yang paling gampang dicoba? Tulis di kolom komentar ya! 💬\n\n🔖 Save postingan ini buat pengingat nanti.\n\n3. HASHTAG:\n#" + topik.replace(/\s+/g, "").toLowerCase() + " #tipsbermanfaat #edukasi #reelsindonesia #kontenkreator #infokesehatan";
+
+            for (var i = 0; i < 5; i++) {
+                document.getElementById("st" + i).innerText = "Tugas Selesai ✓";
+            }
+
+            pilihKaryawan(aktif);
+        }
+
+        function salinTeks() {
+            var teks = ambilHasil(aktif);
+            navigator.clipboard.writeText(teks);
