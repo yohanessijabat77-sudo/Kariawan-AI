@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IG Reels AI Studio Pro - 5 Karyawan Otomatis</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: #09090b; color: #fafafa; margin: 0; padding: 14px; }
+        .box { max-width: 640px; margin: 0 auto; }
+        .card { background: #18181b; border: 1px solid #27272a; border-radius: 16px; padding: 16px; margin-bottom: 14px; }
+        .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #3f3f46; background: #000; color: #fff; font-size: 14px; margin-bottom: 10px; }
+        button.main { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; font-weight: bold; font-size: 15px; cursor: pointer; }
+        button.main:disabled { opacity: 0.6; cursor: not-allowed; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+        .agent { background: #18181b; border: 2px solid #27272a; border-radius: 12px; padding: 12px; cursor: pointer; transition: 0.2s; }
+        .agent.active { border-color: #e1306c; background: #2d121e; }
+        .st { font-size: 11px; color: #34d399; margin-top: 6px; font-weight: bold; }
+        .st.busy { color: #fbbf24; }
+        pre { background: #000; border: 1px solid #27272a; border-radius: 12px; padding: 14px; white-space: pre-wrap; word-wrap: break-word; font-size: 13px; line-height: 1.6; color: #e4e4e7; margin: 0; }
+        .btn-sm { background: #27272a; color: #fff; border: 1px solid #3f3f46; padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 600; }
+        .btn-pink { background: #e1306c; color: #fff; border: none; padding: 10px 14px; border-radius: 10px; font-size: 13px; cursor: pointer; font-weight: bold; }
+        #apiPanel { display: none; background: #111; border: 1px solid #e1306c; padding: 12px; border-radius: 12px; margin-bottom: 12px; }
+        
+        /* Area Visual Bima */
+        #visualArea { display: none; margin-top: 12px; }
+        .img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+        .img-card { background: #000; border: 1px solid #3f3f46; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 8px; }
+        .img-card img { width: 100%; aspect-ratio: 9/16; object-fit: cover; display: block; background: #111; }
+        .img-card a { display: inline-block; margin-top: 6px; font-size: 11px; color: #f472b6; text-decoration: none; font-weight: bold; padding: 4px 8px; border: 1px solid #f472b6; border-radius: 6px; }
+
+        /* Area Audio Sari */
+        #audioArea { display: none; background: #000; border: 1px solid #3f3f46; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="card">
+        <div class="row">
+            <div>
+                <strong style="color:#f472b6; font-size:17px;">IG Reels AI Studio Pro</strong>
+                <div style="font-size:11px; color:#a1a1aa;">5 Karyawan AI Otomatis (Teks + Gambar 9:16 + Suara)</div>
+            </div>
+            <button type="button" class="btn-sm" id="btnToggleApi">🔑 API Key</button>
+        </div>
+
+        <div id="apiPanel">
+            <div style="font-size:12px; color:#d4d4d8; margin-bottom:8px;">Tempel <b>Gemini API Key</b> (AIza...) agar naskah & ide dibuat AI secara dinamis, atau biarkan kosong untuk Mode Cepat:</div>
+            <input type="text" id="inputKey" placeholder="Tempel API Key di sini...">
+            <button type="button" class="btn-pink" id="btnSaveKey" style="width:100%;">Simpan API Key</button>
+        </div>
+
+        <input type="text" id="inputTopik" placeholder="Ketik topik video (contoh: cara berhenti merokok)...">
+        <button type="button" class="main" id="btnMulai">🚀 Tugaskan Semua Karyawan AI</button>
+    </div>
+
+    <div class="grid">
+        <div class="agent active" id="card0"><b>01. Raka</b><br><small style="color:#a1a1aa">Riset & Hook Viral</small><div class="st" id="st0">Siap Bertugas</div></div>
+        <div class="agent" id="card1"><b>02. Nadia</b><br><small style="color:#a1a1aa">Penulis Naskah Reels</small><div class="st" id="st1">Siap Bertugas</div></div>
+        <div class="agent" id="card2"><b>03. Bima</b><br><small style="color:#a1a1aa">Generator Gambar 9:16</small><div class="st" id="st2">Siap Bertugas</div></div>
+        <div class="agent" id="card3"><b>04. Sari</b><br><small style="color:#a1a1aa">Pembaca Suara AI</small><div class="st" id="st3">Siap Bertugas</div></div>
+        <div class="agent" id="card4" style="grid-column: span 2;"><b>05. Dito</b><br><small style="color:#a1a1aa">Cover, Caption & Hashtag IG</small><div class="st" id="st4">Siap Bertugas</div></div>
+    </div>
+
+    <div class="card">
+        <div class="row">
+            <strong id="judulLayar" style="color:#f472b6;">Hasil Kerja: Raka</strong>
+            <button type="button" class="btn-sm" id="btnSalin">📋 Salin Teks</button>
+        </div>
+
+        <!-- Kontrol Suara Otomatis Sari -->
+        <div id="audioArea">
+            <div style="font-size:12px; color:#a1a1aa; margin-bottom:8px;">🎙️ <b>Studio Suara Sari:</b> Dengarkan langsung suara narator untuk naskah di bawah (bisa direkam layar atau gunakan di CapCut):</div>
+            <div style="display:flex; gap:8px;">
+                <button type="button" class="btn-pink" id="btnPlaySuara">▶️ Putar Suara Narator</button>
+                <button type="button" class="btn-sm" id="btnStopSuara">⏹️ Stop</button>
+            </div>
+        </div>
+
+        <pre id="isiLayar">Ketik topik video di atas lalu tekan tombol "🚀 Tugaskan Semua Karyawan AI".
+
+• Raka akan meriset Hook 3 detik pertama.
+• Nadia akan menulis naskah lengkap.
+• Bima akan LANGSUNG membuat 3 gambar vertikal (9:16) di sini.
+• Sari akan LANGSUNG membacakan suara narasinya.
+• Dito akan menyiapkan Cover, Caption & Hashtag.</pre>
+
+        <!-- Galeri Gambar Otomatis Bima -->
+        <div id="visualArea">
+            <div style="font-size:12px; color:#f472b6; font-weight:bold; margin-top:12px;">🖼️ Gambar Vertikal (9:16) Hasil Karya Bima (Tekan tahan gambar / ketuk Buka Gambar untuk menyimpan):</div>
+            <div class="img-grid" id="imgGrid"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var aktif = 0;
+    var naskahBersih = "";
+    var promptGambar = ["", "", ""];
+    var urlGambar = ["", "", ""];
+
+    var hasil = [
+        "Belum ada tugas. Ketik topik di atas lalu tekan tombol pink.",
+        "Belum ada tugas. Ketik topik di atas lalu tekan tombol pink.",
+        "Belum ada tugas. Ketik topik di atas lalu tekan tombol pink.",
+        "Belum ada tugas. Ketik topik di atas lalu tekan tombol pink.",
+        "Belum ada tugas. Ketik topik di atas lalu tekan tombol pink."
+    ];
+
+    var namaKaryawan = [
+        "Raka (Hook & Strategi)",
+        "Nadia (Naskah Reels)",
+        "Bima (Gambar Visual 9:16)",
+        "Sari (Suara Narator & Musik)",
+        "Dito (Cover, Caption & Hashtag)"
+    ];
+
+    var apiKey = "";
+    try { apiKey = localStorage.getItem("ig_ai_key") || ""; } catch (e) {}
+
+    function tampilkan(idx) {
+        aktif = idx;
+        document.getElementById("judulLayar").innerText = "Hasil Kerja: " + namaKaryawan[idx];
+        document.getElementById("isiLayar").innerText = hasil[idx];
+
+        document.getElementById("visualArea").style.display = (idx === 2 && urlGambar[0] !== "") ? "block" : "none";
+        document.getElementById("audioArea").style.display = (idx === 3 && naskahBersih !== "") ? "block" : "none";
+
+        for (var i = 0; i < 5; i++) {
+            var el = document.getElementById("card" + i);
+            el.className = (i === idx) ? "agent active" : "agent";
+        }
+    }
+
+    for (var k = 0; k < 5; k++) {
+        (function(index) {
+            document.getElementById("card" + index).onclick = function() { tampilkan(index); };
+        })(k);
+    }
+
+    document.getElementById("btnToggleApi").onclick = function() {
+        var panel = document.getElementById("apiPanel");
+        document.getElementById("inputKey").value = apiKey;
+        panel.style.display = (panel.style.display === "block") ? "none" : "block";
+    };
+
+    document.getElementById("btnSaveKey").onclick = function() {
+        apiKey = document.getElementById("inputKey").value.trim();
+        try { localStorage.setItem("ig_ai_key", apiKey); } catch (e) {}
+        document.getElementById("apiPanel").style.display = "none";
+        alert("API Key berhasil disimpan!");
+    };
+
+    document.getElementById("btnSalin").onclick = function() {
+        var teks = (aktif === 3 && naskahBersih) ? naskahBersih : hasil[aktif];
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(teks).then(function() { alert("Teks berhasil disalin!"); });
+        } else {
+            alert("Silakan blok dan salin teks di kotak hitam.");
+        }
+    };
+
+    // Fitur Suara Sari (Web Speech API)
+    document.getElementById("btnPlaySuara").onclick = function() {
+        if (!("speechSynthesis" in window)) {
+            alert("Browser HP ini tidak mendukung pemutar suara otomatis. Silakan salin naskah ke CapCut Text-to-Speech.");
+            return;
+        }
+        window.speechSynthesis.cancel();
+        var ucapan = new SpeechSynthesisUtterance(naskahBersih);
+        ucapan.lang = "id-ID";
+        ucapan.rate = 1.05;
+        ucapan.pitch = 1.0;
+        window.speechSynthesis.speak(ucapan);
+    };
+
+    document.getElementById("btnStopSuara").onclick = function() {
+        if ("speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+        }
+    };
+
+    function bangunGaleriBima() {
+        var grid = document.getElementById("imgGrid");
+        grid.innerHTML = "";
+        for (var i = 0; i < 3; i++) {
+            var seed = Math.floor(Math.random() * 99999) + i;
+            var encoded = encodeURIComponent(promptGambar[i] + ", vertical 9:16, cinematic lighting, aesthetic photography, ultra detailed, 8k");
+            var imgUrl = "https://image.pollinations.ai/prompt/" + encoded + "?width=720&height=1280&nologo=true&seed=" + seed;
+            urlGambar[i] = imgUrl;
+
+            var card = document.createElement("div");
+            card.className = "img-card";
+            card.innerHTML = '<img src="' + imgUrl + '" alt="Adegan ' + (i + 1) + '" loading="lazy">' +
+                             '<div style="font-size:11px; color:#ccc; margin-top:4px;">Adegan ' + (i + 1) + '</div>' +
+                             '<a href="' + imgUrl + '" target="_blank">Buka / Simpan</a>';
+            grid.appendChild(card);
+        }
+    }
+
+    function jalankanModeCepat(topik) {
+        hasil[0] = "=== RAKA: STRATEGI & HOOK IG REELS ===\nTopik: " + topik + "\n\n1. HOOK LAYAR (3 Detik Pertama):\n\"STOP SCROLL! RAHASIA " + topik.toUpperCase() + "\"\n\n2. HOOK SUARA:\n\"Banyak orang gagal soal " + topik + " karena melewatkan 1 hal penting ini...\"\n\n3. STRUKTUR RETENSI:\n- 0-4 dtk: Hook visual & teks kontras\n- 5-25 dtk: Poin inti tanpa basa-basi\n- 26-35 dtk: Ajakan Save & Share";
+
+        naskahBersih = "Tau gak kenapa " + topik + " sering susah berhasil? Karena kita terlalu fokus pada cara yang rumit. Mulai hari ini, terapkan langkah kecil yang konsisten setiap hari tentang " + topik + ". Lakukan secara rutin selama tujuh hari pertama dan rasakan langsung perubahannya. Simpan video ini biar gak lupa, dan kirim ke temanmu yang butuh!";
+
+        hasil[1] = "=== NADIA: NASKAH LENGKAP (35 DETIK) ===\n\n[00:00 - 00:05] HOOK\nSuara: \"Tau gak kenapa " + topik + " sering susah berhasil?\"\nTeks Layar: \"JANGAN SALAH CARA! ⚠️\"\n\n[00:06 - 00:18] POIN 1\nSuara: \"Karena kita terlalu fokus pada cara yang rumit. Mulai hari ini, terapkan langkah kecil yang konsisten setiap hari tentang " + topik + ".\"\nTeks Layar: \"1. Mulai Langkah Kecil\"\n\n[00:19 - 00:28] POIN 2\nSuara: \"Lakukan secara rutin selama tujuh hari pertama dan rasakan langsung perubahannya.\"\nTeks Layar: \"2. Konsisten 7 Hari\"\n\n[00:29 - 00:35] PENUTUP\nSuara: \"Simpan video ini biar gak lupa, dan kirim ke temanmu yang butuh!\"\nTeks Layar: \"SAVE & SHARE 🔖\"";
+
+        promptGambar[0] = "Dramatic close up aesthetic shot representing " + topik + ", moody morning sunlight";
+        promptGambar[1] = "Minimalist modern lifestyle scene illustrating " + topik + ", warm natural tones, 35mm lens";
+        promptGambar[2] = "Inspiring bright scene representing positive change in " + topik + ", vibrant natural colors";
+
+        bangunGaleriBima();
+
+        hasil[2] = "=== BIMA: 3 GAMBAR VISUAL (9:16) SIAP PAKAI ===\nBima telah membuatkan 3 gambar vertikal di bawah ini untuk Adegan 1, 2, dan 3. Ketuk 'Buka / Simpan' atau tekan tahan gambarnya untuk menyimpan ke galeri HP kamu!\n\nPrompt yang digunakan:\n1. " + promptGambar[0] + "\n2. " + promptGambar[1] + "\n3. " + promptGambar[2];
+
+        hasil[3] = "=== SARI: SUARA NARATOR & ARAHAN MUSIK ===\nTekan tombol '▶️ Putar Suara Narator' di atas untuk mendengarkan suara otomatisnya.\n\nNaskah Siap Baca (untuk CapCut Text-to-Speech):\n\"" + naskahBersih + "\"\n\nRekomendasi Musik Latar IG:\n- Gunakan instrumental Lo-Fi / Ambient Piano di Instagram Reels (volume 15%).";
+
+        hasil[4] = "=== DITO: COVER, CAPTION & HASHTAG ===\n\n1. JUDUL COVER REELS:\n\"RAHASIA " + topik.toUpperCase() + "\"\n\n2. CAPTION INSTAGRAM:\nMasih bingung mulai dari mana soal " + topik + "? Ternyata kuncinya sesimpel ini 👇\n\nCoba praktikkan hari ini dan tulis pengalamanmu di kolom komentar ya! 💬\n\n🔖 Save video ini buat pengingat nanti.\n\n3. HASHTAG:\n#" + topik.replace(/\s+/g, "").toLowerCase() + " #edukasi #tipsindonesia #reelsindonesia #kontenkreator";
+    }
+
+    async function tanyaGemini(peran, tugas) {
+        var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + encodeURIComponent(apiKey);
+        var res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: "Kamu adalah " + peran + ". " + tugas + " Jawab langsung tanpa basa-basi pembuka." }] }]
+            })
+        });
+        var data = await res.json();
+        if (data.error) throw new Error(data.error.message);
+        return data.candidates[0].content.parts[0].text;
+    }
+
+    document.getElementById("btnMulai").onclick = async function() {
+        var topik = document.getElementById("inputTopik").value.trim();
+        if (!topik) {
+            alert("Ketik topik videonya dulu ya!");
+            return;
+        }
+
+        var btn = document.getElementById("btnMulai");
+        btn.disabled = true;
+        btn.innerText = "⏳ Semua Karyawan Sedang Bekerja...";
+
+        if (!apiKey) {
+            jalankanModeCepat(topik);
+            for (var i = 0; i < 5; i++) {
+                var st = document.getElementById("st" + i);
+                st.innerText = "Selesai ✓";
+                st.className = "st";
+            }
+            tampilkan(aktif);
+            btn.disabled = false;
+            btn.innerText = "🚀 Tugaskan Semua Karyawan AI";
+            return;
+        }
+
+        for (var j = 0; j < 5; j++) {
+            var stBusy = document.getElementById("st" + j);
+            stBusy.innerText = "Sedang Bekerja...";
+            stBusy.className = "st busy";
+        }
+        document.getElementById("isiLayar").innerText = "Tim AI sedang menyusun naskah, membuat gambar 9:16, dan menyiapkan suara...";
+
+        try {
+            hasil[0] = await tanyaGemini("Raka, Spesialis Hook Instagram Reels", "Buatkan 3 pilihan Hook 3 detik pertama dan struktur video Reels 35 detik dalam bahasa Indonesia untuk topik: " + topik);
+            document.getElementById("st0").innerText = "Tugas Selesai ✓";
+            document.getElementById("st0").className = "st";
+            if (aktif === 0) tampilkan(0);
+
+            hasil[1] = await tanyaGemini("Nadia, Scriptwriter Instagram Reels", "Buatkan naskah lengkap per detik (pisahkan SUARA NARATOR dan TEKS LAYAR) dalam bahasa Indonesia untuk topik: " + topik + " berdasarkan konsep ini: " + hasil[0]);
+            naskahBersih = await tanyaGemini("Editor Naskah", "Ambil HANYA kalimat yang diucapkan oleh narator (tanpa tanda kurung, tanpa keterangan waktu, tanpa label teks layar) dari naskah berikut agar siap dibacakan oleh mesin suara: " + hasil[1]);
+            document.getElementById("st1").innerText = "Tugas Selesai ✓";
+            document.getElementById("st1").className = "st";
+            if (aktif === 1) tampilkan(1);
+
+            var rawPrompts = await tanyaGemini("Bima, Sutradara Visual AI", "Buatkan tepat 3 prompt deskripsi gambar dalam bahasa Inggris (tanpa nomor, pisahkan dengan tanda |||) untuk adegan pembuka, isi, dan penutup dari naskah ini: " + hasil[1]);
+            var splitP = rawPrompts.split("|||");
+            promptGambar[0] = (splitP[0] || "Cinematic vertical scene about " + topik).trim();
+            promptGambar[1] = (splitP[1] || "Aesthetic lifestyle photography representing " + topik).trim();
+            promptGambar[2] = (splitP[2] || "Inspiring close up shot about " + topik).trim();
+            bangunGaleriBima();
+            hasil[2] = "=== BIMA: 3 GAMBAR VISUAL (9:16) SIAP PAKAI ===\nGambar otomatis muncul di bawah ini. Ketuk 'Buka / Simpan' untuk mengunduh ke galeri HP kamu!\n\n1. " + promptGambar[0] + "\n2. " + promptGambar[1] + "\n3. " + promptGambar[2];
+            document.getElementById("st2").innerText = "Gambar Jadi ✓";
+            document.getElementById("st2").className = "st";
+            if (aktif === 2) tampilkan(2);
+
+            var arahanAudio = await tanyaGemini("Sari, Pengarah Audio IG Reels", "Berikan rekomendasi gaya suara dan musik latar IG Reels dalam bahasa Indonesia untuk naskah ini: " + hasil[1]);
+            hasil[3] = "=== SARI: STUDIO SUARA & MUSIK IG ===\nTekan tombol '▶️ Putar Suara Narator' di atas untuk mendengarkan langsung suara narasinya.\n\n" + arahanAudio + "\n\nNaskah Siap Salin ke CapCut:\n\"" + naskahBersih + "\"";
+            document.getElementById("st3").innerText = "Suara Siap ✓";
+            document.getElementById("st3").className = "st";
+            if (aktif === 3) tampilkan(3);
+
+            hasil[4] = await tanyaGemini("Dito, Spesialis Caption & SEO Instagram", "Buatkan teks Cover Reels, Caption pancingan komentar, dan 7 Hashtag dalam bahasa Indonesia untuk topik: " + topik);
+            document.getElementById("st4").innerText = "Tugas Selesai ✓";
+            document.getElementById("st4").className = "st";
+            if (aktif === 4) tampilkan(4);
+
+        } catch (err) {
+            jalankanModeCepat(topik);
+            for (var m = 0; m < 5; m++) {
+                document.getElementById("st" + m).innerText = "Selesai ✓";
+                document.getElementById("st" + m).className = "st";
+            }
+            tampilkan(aktif);
+        }
+
+        btn.disabled = false;
+        btn.innerText = "🚀 Tugaskan Semua Karyawan AI";
+    };
+})();
+</script>
+</body>
+</html>
